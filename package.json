@@ -1,7 +1,7 @@
 {
   "name": "mern-2",
   "version": "1.0.0",
-  "description": "",
+  "description": "Node.js and mongoDB tutorial",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,7 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "joi": "^17.12.1"
   },
   "devDependencies": {
     "jest": "^29.7.0",
