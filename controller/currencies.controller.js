@@ -1,12 +1,30 @@
 const { data } = require('../data.json');
 
+const PASSWORD = process.env.ROUTE_PASSWORD
+
+const verifyAuth = (req) => {
+    const { authorization } = req.headers;
+    if (!authorization) {
+        return false;
+    }
+    if (authorization !== PASSWORD) {
+        return false;
+    }
+    return true;
+
+}
+
 const getAllCurrencies = (req, res) => {
-    let { min_value } = req.query;
+    if (!verifyAuth(req)) {
+        res.status(403).json({ message: 'Unauthorized Request' });
+        return;
+    }
+    const { min_value } = req.query;
     console.log(min_value)
-    if(min_value){
+    if (min_value) {
         const result = data.filter((item) => Number(item.min_size) === Number(min_value));
         res.json(result);
-    }else{
+    } else {
         res.json(data);
     }
 }
@@ -16,7 +34,7 @@ const getCurrencyBySymbol = (req, res) => {
 
     const result = data.find((item) => item.id.toLowerCase() === symbol.toLowerCase());
     console.log(result);
-    
+
     if (result) {
         res.json(result);
     } else {
