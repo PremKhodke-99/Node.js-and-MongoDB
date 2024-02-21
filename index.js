@@ -1,5 +1,8 @@
 const express = require('express');
-const { data } = require('./data.json');
+
+const { getAllCurrencies, getCurrencyBySymbol } = require('./controller/currencies.controller');
+const { getAllUsers, getUserByUuid, getUserByGenderAndAge } = require('./controller/users.controller')
+
 
 const app = express();
 const PORT = 8082;
@@ -8,29 +11,12 @@ app.get('/', (req, res) => {
     res.send('<h1>Currency Database</h1>')
 })
 
-app.get('/currencies', (req, res) => {
-    let { min_value } = req.query;
-    // console.log(min_value)
-    if(min_value){
-        const result = data.filter((item) => Number(item.min_size) === Number(min_value));
-        res.json(result);
-    }else{
-        res.json(data);
-    }
-})
+app.get('/currencies', getAllCurrencies);
+app.get('/currencies/:symbol', getCurrencyBySymbol)
 
-app.get('/currencies/:symbol', (req, res) => {
-    const { symbol } = req.params;
-
-    const result = data.find((item) => item.id.toLowerCase() === symbol.toLowerCase());
-    console.log(result);
-    
-    if (result) {
-        res.json(result);
-    } else {
-        res.sendStatus(404)
-    }
-})
+app.get('/users', getAllUsers)
+app.get('/users/search', getUserByGenderAndAge)
+app.get('/users/:uuid', getUserByUuid)
 
 app.listen(PORT, () => {
     console.log('Listening at', PORT);
