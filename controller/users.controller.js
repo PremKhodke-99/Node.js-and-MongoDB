@@ -1,5 +1,5 @@
 const { data } = require('../users.json');
-const getQueryErrors = require('../validators/users.validators');
+// const getQueryErrors = require('../middleware/validators/users.validators');
 
 const getAllUsers = (req, res) => {
     res.json(data);
@@ -21,11 +21,10 @@ const getUserByUuid = (req, res) => {
 const getUserByGenderAndAge = (req, res) => {
     const { gender, age } = req.query;
     console.log(gender, age);
-    const error = getQueryErrors({ age, gender })
-
-    if(error){
-        res.status(422).json(error);
-    }
+    // const error = getQueryErrors({ age, gender })
+    // if(error){
+    //     res.status(422).json(error);
+    // }
 
     if (gender && age) {
         const results = data.filter((item) => item.gender === gender && Number(item.dob.age) >= Number(age));

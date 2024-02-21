@@ -2,20 +2,16 @@ require('dotenv').config();
 const express = require('express');
 
 const currencyRoutes = require('./routes/currencies.routes');
-const userRoutes = require('./routes/users.routes')
+const userRoutes = require('./routes/users.routes');
+
+const {verifyAuth} = require('./middleware/verifyAuth')
 
 const app = express();
 const PORT = 8082;
 
-
+app.use(verifyAuth);
 app.use('/currencies', currencyRoutes);
-// app.get('/currencies', getAllCurrencies);
-// app.get('/currencies/:symbol', getCurrencyBySymbol);
-
 app.use('/users', userRoutes);
-// app.get('/users', getAllUsers);
-// app.get('/users/search', getUserByGenderAndAge);
-// app.get('/users/:uuid', getUserByUuid);
 
 app.listen(PORT, () => {
     console.log('Listening at', PORT);
