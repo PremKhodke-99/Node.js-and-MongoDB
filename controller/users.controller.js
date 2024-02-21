@@ -18,7 +18,23 @@ const getUserByUuid = (req, res) => {
 
 const getUserByGenderAndAge = (req, res) => {
     const { gender, age } = req.query;
-    console.log(gender, age)
+    console.log(gender, age);
+    
+    if (age) {
+        if (!Number(age)) {
+            res.status(422).json({ message: 'Age parameter should be a number' })
+        }
+        if (age <= 0 || age >= 100) {
+            res.status(422).json({ message: 'Age out of bounds. It should be a number between 0 and 100' })
+        }
+    }
+
+    if (gender) {
+        if (!['male', 'female'].includes(gender)) {
+            res.status(422).json({ message: 'Gender to search can be either be "male" or"female"' })
+        }
+    }
+
     if (gender && age) {
         const results = data.filter((item) => item.gender === gender && Number(item.dob.age) >= Number(age));
         res.json(results);
@@ -29,7 +45,7 @@ const getUserByGenderAndAge = (req, res) => {
         const results = data.filter((item) => Number(item.dob.age) >= Number(age));
         res.json(results);
     } else {
-        res.sendStatus(404);
+        res.status(422).json({ message: 'Missing Search Parameters, search using age and/or gender' });
     }
 }
 

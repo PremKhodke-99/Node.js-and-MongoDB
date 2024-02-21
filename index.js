@@ -1,8 +1,7 @@
 const express = require('express');
 
-const { getAllCurrencies, getCurrencyBySymbol } = require('./controller/currencies.controller');
-const { getAllUsers, getUserByUuid, getUserByGenderAndAge } = require('./controller/users.controller')
-
+const currencyRoutes = require('./routes/currencies.routes');
+const userRoutes = require('./routes/users.routes')
 
 const app = express();
 const PORT = 8082;
@@ -11,12 +10,14 @@ app.get('/', (req, res) => {
     res.send('<h1>Currency Database</h1>')
 })
 
-app.get('/currencies', getAllCurrencies);
-app.get('/currencies/:symbol', getCurrencyBySymbol)
+app.use('/currencies', currencyRoutes);
+// app.get('/currencies', getAllCurrencies);
+// app.get('/currencies/:symbol', getCurrencyBySymbol);
 
-app.get('/users', getAllUsers)
-app.get('/users/search', getUserByGenderAndAge)
-app.get('/users/:uuid', getUserByUuid)
+app.use('/users', userRoutes);
+// app.get('/users', getAllUsers);
+// app.get('/users/search', getUserByGenderAndAge);
+// app.get('/users/:uuid', getUserByUuid);
 
 app.listen(PORT, () => {
     console.log('Listening at', PORT);
