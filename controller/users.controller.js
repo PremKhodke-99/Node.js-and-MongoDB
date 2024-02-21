@@ -1,4 +1,5 @@
 const { data } = require('../users.json');
+const getQueryErrors = require('../validators/users.validators');
 
 const getAllUsers = (req, res) => {
     res.json(data);
@@ -16,23 +17,14 @@ const getUserByUuid = (req, res) => {
     }
 }
 
+
 const getUserByGenderAndAge = (req, res) => {
     const { gender, age } = req.query;
     console.log(gender, age);
-    
-    if (age) {
-        if (!Number(age)) {
-            res.status(422).json({ message: 'Age parameter should be a number' })
-        }
-        if (age <= 0 || age >= 100) {
-            res.status(422).json({ message: 'Age out of bounds. It should be a number between 0 and 100' })
-        }
-    }
+    const error = getQueryErrors({ age, gender })
 
-    if (gender) {
-        if (!['male', 'female'].includes(gender)) {
-            res.status(422).json({ message: 'Gender to search can be either be "male" or"female"' })
-        }
+    if(error){
+        res.status(422).json(error);
     }
 
     if (gender && age) {
