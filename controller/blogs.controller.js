@@ -1,16 +1,16 @@
 const Blogs = require('../models/blog.models');
+const BlogService = require('../services/blogs.service');
+const BlogServiceInstance = new BlogService();
 
 const createNewBlog = async (req, res) => {
-    const { title, authors } = req.body
-    const newBlogDoc = new Blogs({ title: title, authors: authors });
-    const result = await newBlogDoc.save()
-    console.log(newBlogDoc);
+    const { body } = req; 
+    const result = await BlogServiceInstance.create(body);
     res.json(result);
 }
 
 const getAllBlogs = async (req, res) => {
     try {
-        const blogs = await Blogs.find({});
+        const blogs = await BlogServiceInstance.findAll()
         res.json(blogs);
     } catch (err) {
         res.status(404).json({ message: "Could not fetch blogs from DB", err });
