@@ -41,9 +41,26 @@ const updateBlogWithId = async (req, res) => {
     }
 }
 
+const searchBlog = async (req, res) => {
+    const { title, authors } = req.query;
+    try {
+        const result = await Blogs.find({
+            $or: [
+                { title },
+                { authors: { $elemMatch: { email: authors } } }
+            ]
+        });
+        res.json(result);
+    } catch (err) {
+        res.status(500)
+            .json({ message: "Coudn't fetch blog posts. Please try again", err })
+    }
+}
+
 module.exports = {
     createNewBlog,
     getAllBlogs,
     deleteBlogWithId,
-    updateBlogWithId
+    updateBlogWithId,
+    searchBlog
 }
